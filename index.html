@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地理游戏中心 · 贺步贵的互动地图小游戏</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#fff; --ink:#1f2937; --muted:#6b7280;
+    --accent:#2b6cb0; --accent2:#d97706; --shadow:0 8px 24px rgba(31,41,55,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    background:linear-gradient(160deg,#eef2f7 0%,#e3ecf5 100%);color:var(--ink);min-height:100vh;padding:24px 16px}
+  .wrap{max-width:960px;margin:0 auto}
+  header{text-align:center;margin-bottom:28px}
+  header h1{font-size:26px;font-weight:700}
+  header h1 .dot{color:var(--accent)}
+  header p{color:var(--muted);font-size:14px;margin-top:6px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .card{display:block;background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:20px;text-decoration:none;color:var(--ink);transition:all .18s ease;border:2px solid transparent;position:relative}
+  .card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 32px rgba(31,41,55,.16)}
+  .card .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;background:#ebf5ff;color:var(--accent);font-weight:600;margin-bottom:10px}
+  .card .tag.teach{background:#fef3e2;color:var(--accent2)}
+  .card h2{font-size:17px;font-weight:700;margin-bottom:6px}
+  .card p{font-size:13px;color:var(--muted);line-height:1.55}
+  .card .arrow{position:absolute;right:16px;top:16px;color:#cbd5e1;font-size:18px;transition:color .18s}
+  .card:hover .arrow{color:var(--accent)}
+
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:32px;line-height:1.7}
+  @media (max-width:600px){
+    header h1{font-size:21px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>地理游戏<span class="dot">·</span>中心</h1>
+    <p>互动地图小游戏合集 —— 看轮廓、猜地名、涂颜色，边玩边记</p>
+  </header>
+
+  <div class="grid">
+    <a class="card" href="capital-guess-game.html">
+      <span class="tag">猜城市</span><span class="arrow">→</span>
+      <h2>中国城市 · 猜猜看</h2>
+      <p>看城市轮廓猜名字，100 个主要城市选择题，答完自动跳下一题</p>
+    </a>
+
+    <a class="card" href="province-quiz-game.html">
+      <span class="tag">猜省份</span><span class="arrow">→</span>
+      <h2>中国省级 · 答题</h2>
+      <p>省级行政区轮廓问答，34 个省级单位逐一轮番上阵</p>
+    </a>
+
+    <a class="card" href="china-city-game.html">
+      <span class="tag">猜城市</span><span class="arrow">→</span>
+      <h2>中国省份 · 猜城市</h2>
+      <p>在省份地图里找出城市，认城市、记方位</p>
+    </a>
+
+    <a class="card" href="world-map-game.html">
+      <span class="tag">猜国家</span><span class="arrow">→</span>
+      <h2>世界 · 猜国家</h2>
+      <p>世界地图轮廓竞猜，认识各国版图</p>
+    </a>
+
+    <a class="card" href="city-color-game.html">
+      <span class="tag">涂色</span><span class="arrow">→</span>
+      <h2>中国地级市 · 涂色</h2>
+      <p>给 370 个地级市上色，一步步点亮全国地图</p>
+    </a>
+
+    <a class="card" href="county-color-game.html">
+      <span class="tag">涂色</span><span class="arrow">→</span>
+      <h2>中国县级 · 涂色</h2>
+      <p>2800+ 县级行政区涂色，最细致的地图挑战</p>
+    </a>
+
+    <a class="card" href="world-map.html">
+      <span class="tag">教学</span><span class="arrow">→</span>
+      <h2>世界地图 · 交互教学</h2>
+      <p>可缩放探索的世界地图，教学演示用</p>
+    </a>
+
+    <a class="card" href="pandas-basics.html">
+      <span class="tag teach">教程</span><span class="arrow">→</span>
+      <h2>Pandas 极简入门</h2>
+      <p>缺失值填充、类别编码，学生版速查教程</p>
+    </a>
+  </div>
+
+  <footer>
+    数据来源：阿里云 DataV（GCJ-02）· 台湾、香港、澳门为中国领土<br>
+    部署于 GitHub Pages
+  </footer>
+</div>
+</body>
+</html>
