@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pandas 极简入门 · 学生版</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+  pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace; }
+  /* 代码高亮 */
+  .code-card .k { color: #38bdf8; font-weight: 600; }   /* 关键字 */
+  .code-card .s { color: #6ee7b7; }                     /* 字符串 */
+  .code-card .c { color: #64748b; font-style: italic; } /* 注释 */
+  .code-card .f { color: #fcd34d; }                     /* 函数 */
+  .code-card .n { color: #fdba74; }                     /* 数字 */
+  ::selection { background: #bae6fd; }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+<!-- 顶部标题 -->
+<header class="max-w-3xl mx-auto px-6 pt-16 pb-10">
+  <p class="text-sm font-semibold tracking-widest text-sky-600 uppercase">Python 数据分析 · 第一课</p>
+  <h1 class="mt-3 text-4xl md:text-5xl font-bold tracking-tight">Pandas 极简入门</h1>
+  <p class="mt-5 text-lg text-slate-600 leading-relaxed">
+    30 分钟搞懂 pandas 是什么，以及三个最常用的函数：
+    <code class="font-mono text-[15px] text-slate-800 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5">ffill</code>、
+    <code class="font-mono text-[15px] text-slate-800 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5">bfill</code>、
+    <code class="font-mono text-[15px] text-slate-800 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5">get_dummies</code>。
+  </p>
+  <p class="mt-6 text-sm text-slate-500">开始前先安装：
+    <code class="font-mono text-slate-800 bg-slate-100 border border-slate-200 rounded px-2 py-1">pip install pandas</code>
+  </p>
+</header>
+
+<!-- 吸顶导航 -->
+<nav class="sticky top-0 z-10 bg-white/85 backdrop-blur border-b border-slate-200">
+  <div class="max-w-3xl mx-auto px-6 py-3 flex flex-wrap gap-x-6 gap-y-1 text-sm font-medium text-slate-500">
+    <a href="#intro" class="hover:text-sky-600 transition">01 是什么</a>
+    <a href="#fill" class="hover:text-sky-600 transition">02 缺失值填充 ffill / bfill</a>
+    <a href="#dummies" class="hover:text-sky-600 transition">03 类别编码 get_dummies</a>
+    <a href="#cheatsheet" class="hover:text-sky-600 transition">04 速查表</a>
+  </div>
+</nav>
+
+<main class="max-w-3xl mx-auto px-6 pb-24">
+
+  <!-- 01 Pandas 是什么 -->
+  <section id="intro" class="scroll-mt-20 pt-16">
+    <div class="flex items-baseline gap-3">
+      <span class="font-mono text-sm font-bold text-sky-600">01</span>
+      <h2 class="text-2xl md:text-3xl font-bold">Pandas 是什么</h2>
+    </div>
+    <p class="mt-4 text-[17px] text-slate-700 leading-relaxed">
+      pandas 是 Python 的数据分析核心库：读表格、清洗数据、统计分析、做特征，都靠它。它只有两个核心数据结构：
+    </p>
+    <div class="grid sm:grid-cols-2 gap-4 mt-6">
+      <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-5">
+        <h3 class="font-semibold">Series —— 一维</h3>
+        <p class="mt-1.5 text-[15px] text-slate-600 leading-relaxed">带索引的一列数据，相当于"有编号的列表"。</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-5">
+        <h3 class="font-semibold">DataFrame —— 二维</h3>
+        <p class="mt-1.5 text-[15px] text-slate-600 leading-relaxed">多列组成的表格，类似 Excel 表，日常分析主要用它。</p>
+      </div>
+    </div>
+
+    <div class="code-card relative rounded-xl overflow-hidden border border-slate-700 bg-slate-900 mt-8" data-code-card>
+      <button class="copy-btn absolute top-3 right-3 text-xs px-2.5 py-1.5 rounded-md bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700 transition">复制</button>
+      <pre class="p-5 md:p-6 overflow-x-auto text-[15px] md:text-base leading-relaxed text-slate-200"><code><span class="k">import</span> pandas <span class="k">as</span> pd
+
+<span class="c"># Series：一维</span>
+s = pd.<span class="f">Series</span>([<span class="n">10</span>, <span class="n">20</span>, <span class="n">30</span>])
+
+<span class="c"># DataFrame：二维表格（最常用）</span>
+df = pd.<span class="f">DataFrame</span>({
+    <span class="s">"姓名"</span>: [<span class="s">"小明"</span>, <span class="s">"小红"</span>, <span class="s">"小刚"</span>],
+    <span class="s">"年龄"</span>: [<span class="n">18</span>, <span class="n">17</span>, <span class="n">19</span>],
+    <span class="s">"分数"</span>: [<span class="n">92</span>, <span class="n">85</span>, <span class="n">78</span>]
+})
+
+df.<span class="f">head</span>()      <span class="c"># 看前几行</span>
+df.<span class="f">info</span>()      <span class="c"># 列名、类型、缺失情况</span>
+df.<span class="f">describe</span>()  <span class="c"># 数值列统计摘要</span></code></pre>
+    </div>
+    <div class="mt-4">
+      <p class="text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1.5">df 长这样</p>
+      <pre class="font-mono text-sm md:text-[15px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-x-auto">   姓名  年龄  分数
+0  小明   18   92
+1  小红   17   85
+2  小刚   19   78</pre>
+    </div>
+  </section>
+
+  <!-- 02 ffill / bfill -->
+  <section id="fill" class="scroll-mt-20 pt-20">
+    <div class="flex items-baseline gap-3">
+      <span class="font-mono text-sm font-bold text-sky-600">02</span>
+      <h2 class="text-2xl md:text-3xl font-bold">缺失值填充：ffill / bfill</h2>
+    </div>
+    <p class="mt-4 text-[17px] text-slate-700 leading-relaxed">
+      现实数据经常有空值（<span class="font-mono">NaN</span>），而统计和模型都容不下 NaN，所以要先填充。
+      两个方向，一句话分清：
+    </p>
+    <ul class="mt-3 space-y-1.5 text-[17px] text-slate-700 leading-relaxed list-disc pl-6">
+      <li><span class="font-mono text-slate-900 font-semibold">ffill</span>（forward fill）：拿<span class="font-semibold">前一个</span>有效值往下补空位</li>
+      <li><span class="font-mono text-slate-900 font-semibold">bfill</span>（backward fill）：拿<span class="font-semibold">后一个</span>有效值往回补空位</li>
+    </ul>
+
+    <div class="code-card relative rounded-xl overflow-hidden border border-slate-700 bg-slate-900 mt-8" data-code-card>
+      <button class="copy-btn absolute top-3 right-3 text-xs px-2.5 py-1.5 rounded-md bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700 transition">复制</button>
+      <pre class="p-5 md:p-6 overflow-x-auto text-[15px] md:text-base leading-relaxed text-slate-200"><code><span class="k">import</span> pandas <span class="k">as</span> pd
+
+temps = pd.<span class="f">DataFrame</span>({
+    <span class="s">"气温"</span>: [<span class="n">28.0</span>, <span class="k">None</span>, <span class="k">None</span>, <span class="n">25.0</span>]
+})
+
+temps.<span class="f">ffill</span>()   <span class="c"># 拿"前一个"有效值填空</span></code></pre>
+    </div>
+    <div class="mt-4">
+      <p class="text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1.5">输出</p>
+      <pre class="font-mono text-sm md:text-[15px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-x-auto">    气温
+0  28.0
+1  28.0
+2  28.0
+3  25.0</pre>
+    </div>
+
+    <div class="code-card relative rounded-xl overflow-hidden border border-slate-700 bg-slate-900 mt-8" data-code-card>
+      <button class="copy-btn absolute top-3 right-3 text-xs px-2.5 py-1.5 rounded-md bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700 transition">复制</button>
+      <pre class="p-5 md:p-6 overflow-x-auto text-[15px] md:text-base leading-relaxed text-slate-200"><code>temps.<span class="f">bfill</span>()   <span class="c"># 拿"后一个"有效值填空</span></code></pre>
+    </div>
+    <div class="mt-4">
+      <p class="text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1.5">输出</p>
+      <pre class="font-mono text-sm md:text-[15px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-x-auto">    气温
+0  28.0
+1  25.0
+2  25.0
+3  25.0</pre>
+    </div>
+
+    <div class="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-[15px] text-amber-900 leading-relaxed">
+      <span class="font-semibold">记忆口诀：</span>ffill 抄前桌的答案，bfill 抄后桌的答案。
+      注意：两者都返回新对象，不改动原表；要就地修改用 <span class="font-mono">temps.ffill(inplace=True)</span>。
+    </div>
+  </section>
+
+  <!-- 03 get_dummies -->
+  <section id="dummies" class="scroll-mt-20 pt-20">
+    <div class="flex items-baseline gap-3">
+      <span class="font-mono text-sm font-bold text-sky-600">03</span>
+      <h2 class="text-2xl md:text-3xl font-bold">类别编码：get_dummies</h2>
+    </div>
+    <p class="mt-4 text-[17px] text-slate-700 leading-relaxed">
+      模型只认数字，不认"北京 / 上海"这种文字。<span class="font-mono text-slate-900 font-semibold">get_dummies</span>
+      把一个分类列拆成多个 0/1 列（独热编码），一行代码搞定：
+    </p>
+
+    <div class="code-card relative rounded-xl overflow-hidden border border-slate-700 bg-slate-900 mt-8" data-code-card>
+      <button class="copy-btn absolute top-3 right-3 text-xs px-2.5 py-1.5 rounded-md bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700 transition">复制</button>
+      <pre class="p-5 md:p-6 overflow-x-auto text-[15px] md:text-base leading-relaxed text-slate-200"><code><span class="k">import</span> pandas <span class="k">as</span> pd
+
+df = pd.<span class="f">DataFrame</span>({
+    <span class="s">"姓名"</span>: [<span class="s">"小明"</span>, <span class="s">"小红"</span>, <span class="s">"小刚"</span>],
+    <span class="s">"城市"</span>: [<span class="s">"北京"</span>, <span class="s">"上海"</span>, <span class="s">"北京"</span>],
+    <span class="s">"分数"</span>: [<span class="n">92</span>, <span class="n">85</span>, <span class="n">78</span>]
+})
+
+pd.<span class="f">get_dummies</span>(df, columns=[<span class="s">"城市"</span>], dtype=<span class="k">int</span>)</code></pre>
+    </div>
+    <div class="mt-4">
+      <p class="text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1.5">输出</p>
+      <pre class="font-mono text-sm md:text-[15px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-x-auto">   姓名  分数  城市_北京  城市_上海
+0  小明   92       1       0
+1  小红   85       0       1
+2  小刚   78       1       0</pre>
+    </div>
+
+    <div class="mt-6 rounded-xl border border-sky-200 bg-sky-50 p-4 text-[15px] text-sky-900 leading-relaxed">
+      <span class="font-semibold">两个细节：</span>
+      <span class="font-mono">columns=</span> 指定要编码的列，不写则对所有文本列生效；
+      <span class="font-mono">dtype=int</span> 让结果是 0/1，否则新版 pandas 默认返回 True/False。
+    </div>
+  </section>
+
+  <!-- 04 速查表 -->
+  <section id="cheatsheet" class="scroll-mt-20 pt-20">
+    <div class="flex items-baseline gap-3">
+      <span class="font-mono text-sm font-bold text-sky-600">04</span>
+      <h2 class="text-2xl md:text-3xl font-bold">速查表</h2>
+    </div>
+    <div class="mt-6 overflow-x-auto rounded-xl border border-slate-200">
+      <table class="w-full text-left text-[15px]">
+        <thead class="bg-slate-50 text-slate-500">
+          <tr>
+            <th class="px-4 py-3 font-semibold">用法</th>
+            <th class="px-4 py-3 font-semibold">作用</th>
+            <th class="px-4 py-3 font-semibold">一句话记忆</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          <tr>
+            <td class="px-4 py-3 font-mono whitespace-nowrap">df.ffill()</td>
+            <td class="px-4 py-3">用前一个有效值填充 NaN</td>
+            <td class="px-4 py-3">抄前桌的答案</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono whitespace-nowrap">df.bfill()</td>
+            <td class="px-4 py-3">用后一个有效值填充 NaN</td>
+            <td class="px-4 py-3">抄后桌的答案</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono whitespace-nowrap">pd.get_dummies()</td>
+            <td class="px-4 py-3">分类列拆成 0/1 多列</td>
+            <td class="px-4 py-3">文字变数字</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-8 rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-[15px] text-emerald-900 leading-relaxed">
+      <span class="font-semibold">课堂小练习：</span>
+      <ol class="mt-2 space-y-1.5 list-decimal pl-5">
+        <li>构造一列 <span class="font-mono">[3, None, None, 7]</span>，分别用 ffill 和 bfill 填充，对比结果差异。</li>
+        <li>给"专业"列（计算机 / 数学 / 英语）做 get_dummies，加上 <span class="font-mono">dtype=int</span>。</li>
+        <li>思考：一天中按小时记录的气温缺失了，用哪种填充更合理？为什么？</li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-slate-200">
+  <div class="max-w-3xl mx-auto px-6 py-8 text-sm text-slate-400">
+    Pandas 极简入门 · 纯前端单页 · TailwindCSS · 代码块可一键复制，直接粘贴到 Jupyter 运行
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    var original = btn.textContent;
+    btn.addEventListener('click', async function () {
+      var card = btn.closest('[data-code-card]');
+      var code = card ? card.querySelector('code').innerText : '';
+      var ok = true;
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch (err) {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        } catch (e2) { ok = false; }
+      }
+      btn.textContent = ok ? '已复制' : '复制失败';
+      btn.classList.remove('text-slate-300');
+      btn.classList.add(ok ? 'text-emerald-400' : 'text-red-400');
+      setTimeout(function () {
+        btn.textContent = original;
+        btn.classList.remove('text-emerald-400', 'text-red-400');
+        btn.classList.add('text-slate-300');
+      }, 1600);
+    });
+  });
+</script>
+
+</body>
+</html>
